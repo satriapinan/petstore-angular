@@ -1,1 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-primary: #2a7b9b;
+  --color-primary-hover: #236a86;
+  --color-primary-light: #5a9cb5;
+  --color-primary-chip: rgba(42, 123, 155, 0.15);
+
+  --color-error: #d25353;
+  --color-error-hover: #b84444;
+  --color-error-light: #dc7676;
+  --color-error-chip: rgba(210, 83, 83, 0.15);
+
+  --color-success: #2e7d52;
+  --color-success-hover: #266644;
+  --color-success-light: #579e75;
+  --color-success-chip: rgba(46, 125, 82, 0.15);
+
+  --color-warning: #b97d2a;
+  --color-warning-hover: #9e6a22;
+  --color-warning-light: #cc9d58;
+  --color-warning-chip: rgba(185, 125, 42, 0.15);
+
+  --color-text: #1f2937;
+  --color-text-inverted: #ffffff;
+  --color-text-secondary: #6b7280;
+
+  --color-border: #e5e7eb;
+  --color-background: #f9fafb;
+  --color-disabled: #a3a3a3;
+
+  --border-radius: 6px;
+  --box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+}
