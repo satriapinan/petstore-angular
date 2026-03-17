@@ -1,1 +1,43 @@
-<p>register works!</p>
+<div class="register-container">
+  <app-card minWidth="30vw" [customStyle]="cardStyle">
+    <div class="content-container">
+      <p class="register-subtitle">Create your account</p>
+      <h2 class="register-title">Get Started!</h2>
+    </div>
+
+    <form [formGroup]="form" class="form-container" (ngSubmit)="submit()">
+      <div class="content-container">
+        <app-textfield label="Username" [control]="form.controls.username"></app-textfield>
+        <app-textfield
+          label="Password"
+          type="password"
+          [control]="form.controls.password"
+        ></app-textfield>
+        <app-textfield
+          label="Confirm Password"
+          type="password"
+          [control]="form.controls.confirmPassword"
+        ></app-textfield>
+        @if (passwordMismatch) {
+          <p class="error">Passwords do not match</p>
+        }
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+      </div>
+
+      <app-button
+        label="Sign Up"
+        type="submit"
+        variant="contained"
+        [fullWidth]="true"
+        [loading]="loading()"
+        [disabled]="form.invalid"
+        fontSize="16px"
+        fontWeight="500"
+        padding="14px 20px"
+      ></app-button>
+    </form>
+    <p class="login-link">Already have an account? <a routerLink="/login">Sign in</a></p>
+  </app-card>
+</div>

@@ -1,22 +1,46 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { RegisterPage } from './register.component';
 
-import { Register } from './register.component';
+describe('RegisterPage', () => {
+  let component: RegisterPage;
+  let fixture: ComponentFixture<RegisterPage>;
 
-describe('Register', () => {
-  let component: Register;
-  let fixture: ComponentFixture<Register>;
+  const authMock = {
+    register: vi.fn().mockReturnValue(of({ username: 'test' })),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Register],
+      imports: [RegisterPage],
+      providers: [{ provide: AuthService, useValue: authMock }, provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Register);
+    fixture = TestBed.createComponent(RegisterPage);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call register', () => {
+    component.form.setValue({ username: 'test', password: 'test123', confirmPassword: 'test123' });
+    component.submit();
+    expect(authMock.register).toHaveBeenCalledWith({ username: 'test', password: 'test123' });
+  });
+
+  it('should not submit when passwords do not match', () => {
+    authMock.register.mockClear();
+    component.form.setValue({
+      username: 'test',
+      password: 'test123',
+      confirmPassword: 'different',
+    });
+    component.submit();
+    expect(authMock.register).not.toHaveBeenCalled();
   });
 });
