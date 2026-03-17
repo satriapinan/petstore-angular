@@ -2,11 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "rootDir": "./src/app",
-    "types": ["jasmine"]
+    "rootDir": "./src",
+    "types": ["vitest/globals"]
   },
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-, "src/app/features/orders/order-list/order-list.component.spec.ts", "src/app/shared/components/navbar/navbar.component.spec.ts"  ]
+    "src/**/*.d.ts",
+    "src/app/features/orders/order-list/order-list.component.spec.ts",
+    "src/app/shared/components/navbar/navbar.component.spec.ts"
+  ]
 }
