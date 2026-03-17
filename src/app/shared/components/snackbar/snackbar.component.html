@@ -1,0 +1,6 @@
+@if (snackbar.state().visible) {
+  <div class="snackbar" [class]="snackbar.state().type" [class.hiding]="snackbar.state().hiding">
+    <span>{{ snackbar.state().message }}</span>
+    <button class="close" (click)="snackbar.dismiss()">✕</button>
+  </div>
+}

@@ -1,0 +1,75 @@
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.snackbar {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-inverted);
+  z-index: 9999;
+  box-shadow: var(--box-shadow);
+  min-width: 260px;
+  max-width: 380px;
+  animation: slide-in 0.25s ease forwards;
+
+  &.hiding {
+    animation: slide-out 0.25s ease forwards;
+  }
+
+  &.success {
+    background-color: var(--color-success);
+  }
+  &.error {
+    background-color: var(--color-error);
+  }
+  &.info {
+    background-color: var(--color-primary);
+  }
+
+  span {
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .close {
+    background: none;
+    border: none;
+    color: var(--color-text-inverted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    opacity: 0.8;
+    transition: opacity 0.15s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
