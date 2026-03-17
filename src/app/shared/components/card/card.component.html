@@ -1,0 +1,10 @@
+<div
+  class="card"
+  [style.min-width]="minWidth()"
+  [style.padding]="padding()"
+  [style.border-radius]="borderRadius()"
+  [style.background]="background()"
+  [ngStyle]="customStyle()"
+>
+  <ng-content></ng-content>
+</div>

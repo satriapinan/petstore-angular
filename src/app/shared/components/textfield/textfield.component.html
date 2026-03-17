@@ -1,0 +1,13 @@
+<div class="textfield">
+  <label class="label" [for]="inputId">
+    {{ label() }}
+  </label>
+
+  <input
+    class="input"
+    [id]="inputId"
+    [type]="type()"
+    [formControl]="control()"
+    [placeholder]="placeholder()"
+  />
+</div>

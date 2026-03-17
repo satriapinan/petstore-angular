@@ -1,0 +1,6 @@
+<button class="menu-item" [class.danger]="danger()" (click)="clicked.emit()" type="button">
+  @if (icon()) {
+    <iconify-icon [icon]="icon()" class="menu-item-icon"></iconify-icon>
+  }
+  <span>{{ label() }}</span>
+</button>

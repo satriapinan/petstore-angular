@@ -1,1 +1,25 @@
-<p>navbar works!</p>
+<header class="navbar">
+  <img src="assets/images/logo.png" alt="logo" class="logo" />
+
+  @if (user$ | async; as user) {
+    <div class="navbar-right">
+      <app-menu>
+        <div trigger class="profile">
+          <div class="avatar">
+            {{ getInitial(user.username) }}
+          </div>
+          <span class="username">{{ user.username }}</span>
+        </div>
+
+        <ng-container items>
+          <app-menu-item
+            label="Logout"
+            icon="mdi:logout"
+            [danger]="true"
+            (clicked)="logout()"
+          ></app-menu-item>
+        </ng-container>
+      </app-menu>
+    </div>
+  }
+</header>

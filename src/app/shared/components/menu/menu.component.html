@@ -1,0 +1,11 @@
+<div class="menu-wrapper">
+  <button class="menu-trigger" type="button" (click)="toggle()">
+    <ng-content select="[trigger]"></ng-content>
+  </button>
+
+  @if (isOpen()) {
+    <div class="menu-dropdown">
+      <ng-content select="[items]"></ng-content>
+    </div>
+  }
+</div>
