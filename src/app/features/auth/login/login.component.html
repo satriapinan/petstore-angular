@@ -1,1 +1,35 @@
-<p>login works!</p>
+<div class="login-container">
+  <app-card minWidth="30vw" [customStyle]="cardStyle">
+    <div class="content-container">
+      <p class="login-subtitle">Please enter your details</p>
+      <h2 class="login-title">Welcome Back!</h2>
+    </div>
+
+    <form [formGroup]="form" class="form-container" (ngSubmit)="submit()">
+      <div class="content-container">
+        <app-textfield label="Username" [control]="form.controls.username"></app-textfield>
+        <app-textfield
+          label="Password"
+          type="password"
+          [control]="form.controls.password"
+        ></app-textfield>
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+      </div>
+
+      <app-button
+        label="Sign In"
+        type="submit"
+        variant="contained"
+        [fullWidth]="true"
+        [loading]="loading()"
+        [disabled]="form.invalid"
+        fontSize="16px"
+        fontWeight="500"
+        padding="14px 20px"
+      ></app-button>
+    </form>
+    <p class="register-link">Don't have an account? <a routerLink="/register">Sign up</a></p>
+  </app-card>
+</div>

@@ -1,22 +1,35 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { LoginPage } from './login.component';
 
-import { Login } from './login.component';
+describe('LoginPage', () => {
+  let component: LoginPage;
+  let fixture: ComponentFixture<LoginPage>;
 
-describe('Login', () => {
-  let component: Login;
-  let fixture: ComponentFixture<Login>;
+  const authMock = {
+    login: vi.fn().mockReturnValue(of({ username: 'test', role: 'user' })),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Login],
+      imports: [LoginPage],
+      providers: [{ provide: AuthService, useValue: authMock }, provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Login);
+    fixture = TestBed.createComponent(LoginPage);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call login', () => {
+    component.form.setValue({ username: 'test', password: 'test' });
+    component.submit();
+    expect(authMock.login).toHaveBeenCalled();
   });
 });
