@@ -1,0 +1,35 @@
+<ng-template #dialogTemplate>
+  <div class="modal-content">
+    <div class="modal-icon" [class]="type()">
+      <iconify-icon [icon]="icon()"></iconify-icon>
+    </div>
+
+    <h2 class="modal-title" id="modal-title">{{ title() }}</h2>
+    <p class="modal-message">{{ message() }}</p>
+
+    <div class="modal-actions">
+      <app-button
+        [label]="confirmLabel()"
+        variant="contained"
+        [color]="type()"
+        [fullWidth]="true"
+        [loading]="loading()"
+        [disabled]="loading()"
+        (click)="!loading() && confirmed.emit()"
+        (keydown.enter)="!loading() && confirmed.emit()"
+        (keydown.space)="!loading() && confirmed.emit()"
+      ></app-button>
+
+      <app-button
+        [label]="cancelLabel()"
+        variant="outline"
+        color="primary"
+        [fullWidth]="true"
+        [disabled]="loading()"
+        (click)="!loading() && cancelled.emit()"
+        (keydown.enter)="!loading() && cancelled.emit()"
+        (keydown.space)="!loading() && cancelled.emit()"
+      ></app-button>
+    </div>
+  </div>
+</ng-template>

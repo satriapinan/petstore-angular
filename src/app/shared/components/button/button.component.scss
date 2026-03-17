@@ -1,0 +1,88 @@
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: auto;
+  border-radius: var(--border-radius);
+  border: 1.5px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  &--full {
+    width: 100%;
+  }
+
+  &--color-primary {
+    --c-base: var(--color-primary);
+    --c-hover: var(--color-primary-hover);
+    --c-chip: var(--color-primary-chip);
+  }
+
+  &--color-danger {
+    --c-base: var(--color-error);
+    --c-hover: var(--color-error-hover);
+    --c-chip: var(--color-error-chip);
+  }
+
+  &--color-warning {
+    --c-base: var(--color-warning);
+    --c-hover: var(--color-warning-hover);
+    --c-chip: var(--color-warning-chip);
+  }
+
+  &--color-success {
+    --c-base: var(--color-success);
+    --c-hover: var(--color-success-hover);
+    --c-chip: var(--color-success-chip);
+  }
+
+  &--contained {
+    background-color: var(--c-base);
+    color: var(--color-text-inverted);
+
+    &:hover:not(:disabled) {
+      background-color: var(--c-hover);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-background);
+    }
+
+    &.btn--color-danger,
+    &.btn--color-warning,
+    &.btn--color-success {
+      color: var(--c-base);
+      border-color: var(--c-base);
+
+      &:hover:not(:disabled) {
+        background-color: var(--c-chip);
+      }
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+}

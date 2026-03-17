@@ -1,1 +1,46 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <div class="greetings-row">
+      <div class="greetings">
+        <p class="greetings-subtitle">Good to see you again 👋</p>
+        <h2 class="greetings-title">Dashboard</h2>
+        <p class="greetings-desc">Here's a quick overview of your pet inventory.</p>
+      </div>
+      <app-button
+        label="Add Pet"
+        variant="contained"
+        icon="mdi:plus"
+        (click)="navigateToAddPet()"
+        (keydown.enter)="navigateToAddPet()"
+        (keydown.space)="navigateToAddPet()"
+        padding="12px 16px"
+        [fullWidth]="isMobile()"
+      ></app-button>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-row">
+        <app-spinner [size]="12" color="var(--color-text-secondary)"></app-spinner>
+        <p class="state-text">Loading inventory...</p>
+      </div>
+    } @else if (error()) {
+      <p class="state-text error">{{ error() }}</p>
+    } @else {
+      <div class="cards-row">
+        @for (card of cards; track card.key) {
+          <app-card
+            [customStyle]="inventoryCardStyle"
+            class="inventory-card"
+            (click)="navigateToStatus(card.key)"
+            (keydown.enter)="navigateToStatus(card.key)"
+            (keydown.space)="navigateToStatus(card.key)"
+          >
+            <span class="card-icon">{{ card.icon }}</span>
+            <span class="card-label">{{ card.label }}</span>
+            <span class="card-value">{{ inventory()[card.key] }}</span>
+          </app-card>
+        }
+      </div>
+    }
+  </div>
+</div>

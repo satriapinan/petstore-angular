@@ -1,0 +1,37 @@
+<div class="autocomplete">
+  <label class="label" [for]="inputId">
+    {{ label }}
+  </label>
+
+  <div class="input-wrapper">
+    <input
+      class="input"
+      [id]="inputId"
+      type="text"
+      [formControl]="control"
+      [placeholder]="placeholder"
+      (focus)="onInputFocus()"
+      (input)="onInput()"
+      autocomplete="off"
+    />
+    <span class="chevron" [class.open]="isOpen()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path
+          d="M2 4L6 8L10 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
+
+    <div class="dropdown" [class.visible]="isOpen() && filteredOptions().length > 0">
+      @for (option of filteredOptions(); track option) {
+        <button type="button" class="dropdown-item" (mousedown)="selectOption(option)">
+          {{ option }}
+        </button>
+      }
+    </div>
+  </div>
+</div>

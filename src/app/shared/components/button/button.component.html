@@ -1,0 +1,19 @@
+<button
+  [type]="type()"
+  [disabled]="disabled() || loading()"
+  class="btn"
+  [class]="'btn--' + variant() + ' btn--color-' + color()"
+  [class.btn--full]="fullWidth()"
+  [style.font-size]="fontSize()"
+  [style.font-weight]="fontWeight()"
+  [style.padding]="padding()"
+>
+  @if (loading()) {
+    <app-spinner [size]="16" color="currentColor" />
+  } @else {
+    @if (icon()) {
+      <iconify-icon [attr.icon]="icon()" width="18" height="18" class="btn__icon"></iconify-icon>
+    }
+    <span>{{ label() }}</span>
+  }
+</button>

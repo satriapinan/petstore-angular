@@ -1,22 +1,40 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { NavbarLayout } from './navbar.component';
 
-import { Navbar } from './navbar.component';
-
-describe('Navbar', () => {
-  let component: Navbar;
-  let fixture: ComponentFixture<Navbar>;
+describe('NavbarLayout', () => {
+  let component: NavbarLayout;
+  let fixture: ComponentFixture<NavbarLayout>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Navbar],
+      imports: [NavbarLayout],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: { user$: of(null), logout: vi.fn() },
+        },
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Navbar);
+    fixture = TestBed.createComponent(NavbarLayout);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return first letter uppercase', () => {
+    const result = component.getInitial('satria');
+    expect(result).toBe('S');
+  });
+
+  it('should return empty string if username is empty', () => {
+    const result = component.getInitial('');
+    expect(result).toBe('');
   });
 });
