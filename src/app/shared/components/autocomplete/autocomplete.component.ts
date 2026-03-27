@@ -2,43 +2,67 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   ElementRef,
+  forwardRef,
   HostListener,
   inject,
   Input,
   OnInit,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-autocomplete',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './autocomplete.component.html',
   styleUrl: './autocomplete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AutocompleteComponent),
+      multi: true,
+    },
+  ],
 })
-export class AutocompleteComponent implements OnInit {
+export class AutocompleteComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true }) label!: string;
-  @Input({ required: true }) control!: FormControl;
   @Input({ required: true }) options!: string[];
   @Input() placeholder = '';
 
   private readonly eRef = inject(ElementRef);
-  private readonly destroyRef = inject(DestroyRef);
 
   readonly inputId = `autocomplete-${Math.random().toString(36).substring(2, 9)}`;
   readonly filteredOptions = signal<string[]>([]);
   readonly isOpen = signal(false);
 
+  value = '';
+  disabled = false;
+
+  private onChange: (value: string) => void = () => undefined;
+  private onTouched: () => void = () => undefined;
+
   ngOnInit(): void {
     this.filteredOptions.set([...this.options]);
-    this.control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.filterOptions();
-    });
+  }
+
+  writeValue(value: string): void {
+    this.value = value ?? '';
+    this.filterOptions();
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   @HostListener('document:click', ['$event'])
@@ -56,15 +80,21 @@ export class AutocompleteComponent implements OnInit {
   onInput(): void {
     this.isOpen.set(true);
     this.filterOptions();
+    this.onChange(this.value);
+  }
+
+  onBlur(): void {
+    this.onTouched();
   }
 
   selectOption(option: string): void {
-    this.control.setValue(option);
+    this.value = option;
+    this.onChange(this.value);
     this.isOpen.set(false);
   }
 
   private filterOptions(): void {
-    const query = (this.control.value ?? '').toLowerCase();
+    const query = (this.value ?? '').toLowerCase();
     this.filteredOptions.set(this.options.filter((opt) => opt.toLowerCase().includes(query)));
   }
 }

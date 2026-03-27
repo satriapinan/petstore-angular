@@ -28,7 +28,8 @@ describe('LoginPage', () => {
   });
 
   it('should call login', () => {
-    component.form.setValue({ username: 'test', password: 'test' });
+    component.username = 'test';
+    component.password = 'test';
     component.submit();
     expect(authMock.login).toHaveBeenCalled();
   });

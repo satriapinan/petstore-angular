@@ -1,12 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth/auth.service';
@@ -21,60 +14,54 @@ const CARD_STYLE: Record<string, string> = {
   gap: '16px',
 };
 
-export const passwordMatchValidator: ValidatorFn = (
-  control: AbstractControl,
-): ValidationErrors | null => {
-  const password = control.get('password');
-  const confirmPassword = control.get('confirmPassword');
-  if (!password || !confirmPassword) return null;
-  return password.value === confirmPassword.value ? null : { passwordMismatch: true };
-};
-
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ButtonComponent, CardComponent, TextfieldComponent],
+  imports: [FormsModule, RouterLink, ButtonComponent, CardComponent, TextfieldComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterPage {
-  private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly cardStyle = CARD_STYLE;
 
-  readonly form = this.fb.nonNullable.group(
-    {
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-    },
-    { validators: passwordMatchValidator },
-  );
+  username = '';
+  password = '';
+  confirmPassword = '';
 
   get passwordMismatch(): boolean {
-    return this.form.hasError('passwordMismatch') && this.form.controls.confirmPassword.dirty;
+    return this.confirmPassword.length > 0 && this.password !== this.confirmPassword;
+  }
+
+  get isFormInvalid(): boolean {
+    return (
+      !this.username.trim() ||
+      !this.password.trim() ||
+      !this.confirmPassword.trim() ||
+      this.passwordMismatch
+    );
   }
 
   submit() {
-    if (this.form.invalid) return;
+    if (this.isFormInvalid) return;
 
     this.loading.set(true);
     this.error.set(null);
 
-    const { username, password } = this.form.getRawValue();
-
-    this.authService.register({ username, password } as User).subscribe({
-      next: () => {
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set('Registration failed. Please try again.');
-        this.loading.set(false);
-      },
-    });
+    this.authService
+      .register({ username: this.username, password: this.password } as User)
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+        },
+        error: () => {
+          this.error.set('Registration failed. Please try again.');
+          this.loading.set(false);
+        },
+      });
   }
 }

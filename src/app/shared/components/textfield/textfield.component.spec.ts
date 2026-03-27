@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
 import { TextfieldComponent } from './textfield.component';
 
 describe('TextfieldComponent', () => {
@@ -15,7 +14,6 @@ describe('TextfieldComponent', () => {
     component = fixture.componentInstance;
 
     fixture.componentRef.setInput('label', 'Username');
-    fixture.componentRef.setInput('control', new FormControl(''));
 
     fixture.detectChanges();
   });
@@ -47,7 +45,8 @@ describe('TextfieldComponent', () => {
   });
 
   it('should bind control value to input', () => {
-    component.control().setValue('hello');
+    fixture.componentRef.setInput('type', 'text');
+    component.writeValue('hello');
     fixture.detectChanges();
     const input = fixture.nativeElement.querySelector('input');
     expect(input.value).toBe('hello');
