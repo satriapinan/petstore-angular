@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl } from '@angular/forms';
 import { AutocompleteComponent } from './autocomplete.component';
 
 describe('AutocompleteComponent', () => {
@@ -17,7 +16,6 @@ describe('AutocompleteComponent', () => {
     component = fixture.componentInstance;
 
     component.label = 'Fruit';
-    component.control = new FormControl('');
     component.options = mockOptions;
 
     fixture.detectChanges();
@@ -46,30 +44,30 @@ describe('AutocompleteComponent', () => {
   });
 
   it('should filter options based on input value', () => {
-    component.control.setValue('an');
+    component.value = 'an';
     component.onInput();
     expect(component.filteredOptions()).toContain('Banana');
     expect(component.filteredOptions()).not.toContain('Apple');
   });
 
   it('should show all options when input is cleared', () => {
-    component.control.setValue('an');
+    component.value = 'an';
     component.onInput();
-    component.control.setValue('');
+    component.value = '';
     component.onInput();
     expect(component.filteredOptions().length).toBe(mockOptions.length);
   });
 
   it('should return empty array when no options match', () => {
-    component.control.setValue('zzz');
+    component.value = 'zzz';
     component.onInput();
     expect(component.filteredOptions().length).toBe(0);
   });
 
-  it('should set control value and close dropdown on selectOption', () => {
+  it('should set value and close dropdown on selectOption', () => {
     component.isOpen.set(true);
     component.selectOption('Banana');
-    expect(component.control.value).toBe('Banana');
+    expect(component.value).toBe('Banana');
     expect(component.isOpen()).toBe(false);
   });
 

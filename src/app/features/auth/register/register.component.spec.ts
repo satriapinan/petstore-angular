@@ -28,18 +28,18 @@ describe('RegisterPage', () => {
   });
 
   it('should call register', () => {
-    component.form.setValue({ username: 'test', password: 'test123', confirmPassword: 'test123' });
+    component.username = 'test';
+    component.password = 'test123';
+    component.confirmPassword = 'test123';
     component.submit();
     expect(authMock.register).toHaveBeenCalledWith({ username: 'test', password: 'test123' });
   });
 
   it('should not submit when passwords do not match', () => {
     authMock.register.mockClear();
-    component.form.setValue({
-      username: 'test',
-      password: 'test123',
-      confirmPassword: 'different',
-    });
+    component.username = 'test';
+    component.password = 'test123';
+    component.confirmPassword = 'different';
     component.submit();
     expect(authMock.register).not.toHaveBeenCalled();
   });

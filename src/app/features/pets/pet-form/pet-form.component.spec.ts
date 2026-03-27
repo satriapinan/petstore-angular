@@ -56,31 +56,29 @@ describe('PetFormPage', () => {
   });
 
   it('should initialize form with default values', () => {
-    expect(component.form.get('name')?.value).toBe('');
-    expect(component.form.get('category')?.value).toBe('');
-    expect(component.form.get('tag')?.value).toBe('');
-    expect(component.form.get('status')?.value).toBe('available');
+    expect(component.name).toBe('');
+    expect(component.category).toBe('');
+    expect(component.tag).toBe('');
+    expect(component.status).toBe('available');
   });
 
   it('should not submit when name is empty', () => {
-    component.form.get('name')?.setValue('');
+    component.name = '';
     component.onSubmit();
     expect(petServiceMock.createPet).not.toHaveBeenCalled();
   });
 
   it('should mark name as touched on invalid submit', () => {
-    component.form.get('name')?.setValue('');
+    component.name = '';
     component.onSubmit();
-    expect(component.form.get('name')?.touched).toBe(true);
+    expect(component.nameTouched).toBe(true);
   });
 
   it('should call createPet with correct payload', () => {
-    component.form.setValue({
-      name: 'Buddy',
-      category: 'Dogs',
-      tag: 'Vaccinated',
-      status: 'available',
-    });
+    component.name = 'Buddy';
+    component.category = 'Dogs';
+    component.tag = 'Vaccinated';
+    component.status = 'available';
 
     component.onSubmit();
 
@@ -94,7 +92,7 @@ describe('PetFormPage', () => {
   });
 
   it('should navigate to /dashboard on success', async () => {
-    component.form.get('name')?.setValue('Buddy');
+    component.name = 'Buddy';
     component.onSubmit();
     await fixture.whenStable();
     expect(routerMock.navigate).toHaveBeenCalledWith(['/dashboard']);
@@ -103,7 +101,7 @@ describe('PetFormPage', () => {
 
   it('should set error on api failure', async () => {
     petServiceMock.createPet.mockReturnValue(throwError(() => new Error('API error')));
-    component.form.get('name')?.setValue('Buddy');
+    component.name = 'Buddy';
     component.onSubmit();
     await fixture.whenStable();
     expect(component.error()).toBe('Failed to add pet. Please try again.');
