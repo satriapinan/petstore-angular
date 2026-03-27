@@ -47,3 +47,5 @@ Angular adalah framework front-end berbasis TypeScript yang dikembangkan dan dik
 ---
 
 _Framework ini digunakan dalam proyek ini untuk membangun aplikasi CRUD Pet Store dengan autentikasi, memanfaatkan API dari [Swagger Petstore](https://petstore.swagger.io/)._
+
+_Link Demo: https://youtu.be/Nc4MaeMu5NY_
