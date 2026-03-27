@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 import { AuthApiService } from '../api/auth/auth.api.service';
 
@@ -19,13 +19,21 @@ export class AuthService {
       tap(() => {
         localStorage.setItem('token', 'fake-token');
       }),
-      switchMap(() => this.authApi.getUser(username)),
+      switchMap(() =>
+        this.authApi.getUser(username).pipe(
+          catchError((error) => {
+            localStorage.removeItem('token');
+            return throwError(() => error);
+          }),
+        ),
+      ),
       tap((user) => {
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);
         const destination = username === 'admin' ? '/dashboard' : '/pets';
         this.router.navigate([destination]);
       }),
+      catchError((error) => throwError(() => error)),
     );
   }
 
@@ -34,6 +42,7 @@ export class AuthService {
       tap(() => {
         this.router.navigate(['/login']);
       }),
+      catchError((error) => throwError(() => error)),
     );
   }
 
