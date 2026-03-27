@@ -5,18 +5,20 @@
       <h2 class="register-title">Get Started!</h2>
     </div>
 
-    <form [formGroup]="form" class="form-container" (ngSubmit)="submit()">
+    <form class="form-container" (ngSubmit)="submit()">
       <div class="content-container">
-        <app-textfield label="Username" [control]="form.controls.username"></app-textfield>
+        <app-textfield label="Username" [(ngModel)]="username" name="username"></app-textfield>
         <app-textfield
           label="Password"
           type="password"
-          [control]="form.controls.password"
+          [(ngModel)]="password"
+          name="password"
         ></app-textfield>
         <app-textfield
           label="Confirm Password"
           type="password"
-          [control]="form.controls.confirmPassword"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
         ></app-textfield>
         @if (passwordMismatch) {
           <p class="error">Passwords do not match</p>
@@ -32,7 +34,7 @@
         variant="contained"
         [fullWidth]="true"
         [loading]="loading()"
-        [disabled]="form.invalid"
+        [disabled]="isFormInvalid"
         fontSize="16px"
         fontWeight="500"
         padding="14px 20px"

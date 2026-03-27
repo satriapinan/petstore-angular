@@ -8,10 +8,12 @@
       class="input"
       [id]="inputId"
       type="text"
-      [formControl]="control"
+      [value]="value"
       [placeholder]="placeholder"
+      [disabled]="disabled"
       (focus)="onInputFocus()"
-      (input)="onInput()"
+      (input)="value = $any($event.target).value; onInput()"
+      (blur)="onBlur()"
       autocomplete="off"
     />
     <span class="chevron" [class.open]="isOpen()">

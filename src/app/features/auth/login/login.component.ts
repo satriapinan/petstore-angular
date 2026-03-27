@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth/auth.service';
@@ -16,33 +16,32 @@ const CARD_STYLE: Record<string, string> = {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ButtonComponent, CardComponent, TextfieldComponent],
+  imports: [FormsModule, RouterLink, ButtonComponent, CardComponent, TextfieldComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPage {
-  private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly cardStyle = CARD_STYLE;
 
-  readonly form = this.fb.nonNullable.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-  });
+  username = '';
+  password = '';
+
+  get isFormInvalid(): boolean {
+    return !this.username.trim() || !this.password.trim();
+  }
 
   submit() {
-    if (this.form.invalid) return;
+    if (this.isFormInvalid) return;
 
     this.loading.set(true);
     this.error.set(null);
 
-    const { username, password } = this.form.getRawValue();
-
-    this.authService.login(username, password).subscribe({
+    this.authService.login(this.username, this.password).subscribe({
       next: () => {
         this.loading.set(false);
       },

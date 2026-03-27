@@ -14,31 +14,34 @@
       </div>
     </div>
 
-    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form class="form" (ngSubmit)="onSubmit()">
       <div class="form-card">
         <div class="form-section">
           <h3 class="section-title">Basic Info</h3>
           <div class="fields">
             <app-textfield
               label="Name"
-              [control]="nameControl"
+              [(ngModel)]="name"
+              name="name"
               placeholder="e.g. Buddy"
             ></app-textfield>
 
-            @if (nameControl.invalid && nameControl.touched) {
+            @if (!name.trim() && nameTouched) {
               <p class="field-error">Name is required.</p>
             }
 
             <app-autocomplete
               label="Category"
-              [control]="categoryControl"
+              [(ngModel)]="category"
+              name="category"
               [options]="categoryOptions"
               placeholder="e.g. Dogs"
             ></app-autocomplete>
 
             <app-autocomplete
               label="Tag"
-              [control]="tagControl"
+              [(ngModel)]="tag"
+              name="tag"
               [options]="tagOptions"
               placeholder="e.g. Vaccinated"
             ></app-autocomplete>
@@ -49,11 +52,12 @@
           <h3 class="section-title">Status</h3>
           <div class="status-group">
             @for (option of statusOptions; track option.value) {
-              <label class="status-option" [class.active]="statusControl.value === option.value">
+              <label class="status-option" [class.active]="status === option.value">
                 <input
                   type="radio"
                   [value]="option.value"
-                  [formControl]="statusControl"
+                  [(ngModel)]="status"
+                  name="status"
                   class="status-radio"
                 />
                 <span class="status-dot" [class]="option.value"></span>
@@ -85,7 +89,7 @@
           type="submit"
           [fullWidth]="isMobile()"
           [loading]="loading()"
-          [disabled]="form.invalid"
+          [disabled]="isFormInvalid"
         ></app-button>
       </div>
     </form>

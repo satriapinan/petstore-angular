@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, fromEvent } from 'rxjs';
 import { PetService } from '../../../core/services/pet/pet.service';
@@ -26,13 +26,7 @@ import {
 @Component({
   selector: 'app-pet-form',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TextfieldComponent,
-    AutocompleteComponent,
-    ButtonComponent,
-  ],
+  imports: [CommonModule, FormsModule, TextfieldComponent, AutocompleteComponent, ButtonComponent],
   templateUrl: './pet-form.component.html',
   styleUrl: './pet-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,28 +49,20 @@ export class PetFormPage implements OnInit {
   readonly tagOptions = PET_TAGS;
   readonly statusOptions = PET_STATUS_OPTIONS;
 
-  readonly form = new FormGroup({
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    category: new FormControl('', { nonNullable: true }),
-    tag: new FormControl('', { nonNullable: true }),
-    status: new FormControl<'available' | 'pending' | 'sold'>('available', { nonNullable: true }),
-  });
+  name = '';
+  category = '';
+  tag = '';
+  status: 'available' | 'pending' | 'sold' = 'available';
 
-  get nameControl(): FormControl {
-    return this.form.controls.name;
+  get isFormInvalid(): boolean {
+    return !this.name.trim();
   }
 
-  get categoryControl(): FormControl {
-    return this.form.controls.category;
+  get nameTouched(): boolean {
+    return this._nameTouched;
   }
 
-  get tagControl(): FormControl {
-    return this.form.controls.tag;
-  }
-
-  get statusControl(): FormControl {
-    return this.form.controls.status;
-  }
+  private _nameTouched = false;
 
   ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {
@@ -105,12 +91,10 @@ export class PetFormPage implements OnInit {
 
     this.petService.getPetById(id).subscribe({
       next: (pet) => {
-        this.form.patchValue({
-          name: pet.name ?? '',
-          category: pet.category?.name ?? '',
-          tag: pet.tags?.[0]?.name ?? '',
-          status: pet.status ?? 'available',
-        });
+        this.name = pet.name ?? '';
+        this.category = pet.category?.name ?? '';
+        this.tag = pet.tags?.[0]?.name ?? '';
+        this.status = pet.status ?? 'available';
         this.loading.set(false);
       },
       error: () => {
@@ -121,21 +105,19 @@ export class PetFormPage implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    this._nameTouched = true;
 
-    const { name, category, tag, status } = this.form.getRawValue();
+    if (this.isFormInvalid) return;
+
     const currentPetId = this.petId();
 
     const payload = {
       ...(this.isEditMode() && currentPetId !== null ? { id: currentPetId } : {}),
-      name,
-      category: { id: 0, name: category },
-      tags: [{ id: 0, name: tag }],
+      name: this.name,
+      category: { id: 0, name: this.category },
+      tags: [{ id: 0, name: this.tag }],
       photoUrls: [],
-      status,
+      status: this.status,
     };
 
     this.loading.set(true);
@@ -145,7 +127,7 @@ export class PetFormPage implements OnInit {
       this.petService.updatePet(payload).subscribe({
         next: () => {
           this.snackbar.show('Pet successfully updated!', 'success');
-          this.router.navigate(['/pets'], { queryParams: { status } });
+          this.router.navigate(['/pets'], { queryParams: { status: this.status } });
         },
         error: () => {
           this.snackbar.show('Failed to update pet. Please try again.', 'error');
