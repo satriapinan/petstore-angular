@@ -46,22 +46,4 @@ Angular adalah framework front-end berbasis TypeScript yang dikembangkan dan dik
 
 ---
 
-## Perbandingan Singkat dengan Framework Lain
-
-| Aspek         | Angular        | React          | Vue                   |
-| ------------- | -------------- | -------------- | --------------------- |
-| Tipe          | Full Framework | Library UI     | Progressive Framework |
-| Bahasa Utama  | TypeScript     | JavaScript/JSX | JavaScript            |
-| Data Binding  | Two-way        | One-way        | Two-way               |
-| Kurva Belajar | Tinggi         | Sedang         | Rendah                |
-| Cocok Untuk   | Enterprise     | Fleksibel      | Semua skala           |
-
----
-
-## Versi & Pemeliharaan
-
-Angular menggunakan Semantic Versioning dan merilis versi mayor setiap 6 bulan sekali. Setiap versi mayor mendapatkan dukungan aktif selama 18 bulan.
-
----
-
 _Framework ini digunakan dalam proyek ini untuk membangun aplikasi CRUD Pet Store dengan autentikasi, memanfaatkan API dari [Swagger Petstore](https://petstore.swagger.io/)._
